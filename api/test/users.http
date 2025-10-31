@@ -1,0 +1,10 @@
+POST http://localhost:3000/api/users HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "soph",
+  "fullName": "Sofía Gilsanz",
+  "description": "test1",
+  "email": "test@email.com",
+  "password": "coolpassword"
+}
