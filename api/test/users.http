@@ -2,7 +2,7 @@
 GET http://localhost:3000/api/users HTTP/1.1
 
 ### GET BY ID
-GET http://localhost:3000/api/users/<ID> HTTP/1.1
+GET http://localhost:3000/api/users/690c820e882bf26e2290b5c4 HTTP/1.1
 
 ### CREATE USER
 POST http://localhost:3000/api/users HTTP/1.1
