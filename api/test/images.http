@@ -1,0 +1,26 @@
+### GET ALL
+GET http://localhost:3000/api/images HTTP/1.1
+
+### GET BY ID
+GET http://localhost:3000/api/images/<ID> HTTP/1.1
+
+### CREATE images
+POST http://localhost:3000/api/images HTTP/1.1
+Content-Type: application/json
+
+{
+  "location": "Madrid",
+  "imageURL": "IMG-1"
+}
+
+### UPDATE images
+PUT http://localhost:3000/api/images/<ID> HTTP/1.1
+Content-Type: application/json
+
+{
+  "location": "Madrid",
+  "imageURL": "IMG-1"
+}
+
+### DELETE images
+DELETE http://localhost:3000/api/images/<ID> HTTP/1.1

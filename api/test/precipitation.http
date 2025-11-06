@@ -1,0 +1,30 @@
+### GET ALL
+GET http://localhost:3000/api/precipitation HTTP/1.1
+
+### GET BY ID
+GET http://localhost:3000/api/precipitation/<ID> HTTP/1.1
+
+### CREATE precipitation
+POST http://localhost:3000/api/precipitation HTTP/1.1
+Content-Type: application/json
+
+{
+  "type": "rain",
+  "probability": 10,
+  "accomulatedPrecipitation": 5,
+  "sonda": "690c8489882bf26e2290b5d4"
+}
+
+### UPDATE precipitation
+PUT http://localhost:3000/api/precipitation/<ID> HTTP/1.1
+Content-Type: application/json
+
+{
+  "type": "rain",
+  "probability": 10,
+  "accomulatedPrecipitation": 5,
+  "sonda": "690c8489882bf26e2290b5d4"
+}
+
+### DELETE precipitation
+DELETE http://localhost:3000/api/precipitation/<ID> HTTP/1.1

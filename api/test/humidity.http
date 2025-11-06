@@ -1,0 +1,28 @@
+### GET ALL
+GET http://localhost:3000/api/humidity HTTP/1.1
+
+### GET BY ID
+GET http://localhost:3000/api/humidity/<ID> HTTP/1.1
+
+### CREATE humidity
+POST http://localhost:3000/api/humidity HTTP/1.1
+Content-Type: application/json
+
+{
+  "airHumidity": 1,
+  "dewPoint": 2,
+  "sonda": "690c8489882bf26e2290b5d4"
+}
+
+### UPDATE humidity
+PUT http://localhost:3000/api/humidity/<ID> HTTP/1.1
+Content-Type: application/json
+
+{
+  "airHumidity": 1,
+  "dewPoint": 2,
+  "sonda": "690c8489882bf26e2290b5d4"
+}
+
+### DELETE humidity
+DELETE http://localhost:3000/api/humidity/<ID> HTTP/1.1

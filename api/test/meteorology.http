@@ -1,0 +1,30 @@
+### GET ALL
+GET http://localhost:3000/api/meteorology HTTP/1.1
+
+### GET BY ID
+GET http://localhost:3000/api/meteorology/<ID> HTTP/1.1
+
+### CREATE meteorology
+POST http://localhost:3000/api/meteorology HTTP/1.1
+Content-Type: application/json
+
+{
+  "realTemperature": 15,
+  "windChill": 16,
+  "clouds": "sunny",
+  "sonda": "690c8489882bf26e2290b5d4"
+}
+
+### UPDATE meteorology
+PUT http://localhost:3000/api/meteorology/<ID> HTTP/1.1
+Content-Type: application/json
+
+{
+  "realTemperature": 15,
+  "windChill": 16,
+  "clouds": "sunny",
+  "sonda": "690c8489882bf26e2290b5d4"
+}
+
+### DELETE meteorology
+DELETE http://localhost:3000/api/meteorology/<ID> HTTP/1.1

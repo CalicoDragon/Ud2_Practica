@@ -1,0 +1,30 @@
+### GET ALL
+GET http://localhost:3000/api/advanced HTTP/1.1
+
+### GET BY ID
+GET http://localhost:3000/api/advanced/<ID> HTTP/1.1
+
+### CREATE advanced
+POST http://localhost:3000/api/advanced HTTP/1.1
+Content-Type: application/json
+
+{
+  "airPressure": 1,
+  "ultraviolet": 2,
+  "pollen": 3,
+  "sonda": "690c8489882bf26e2290b5d4"
+}
+
+### UPDATE advanced
+PUT http://localhost:3000/api/advanced/<ID> HTTP/1.1
+Content-Type: application/json
+
+{
+  "airPressure": 1,
+  "ultraviolet": 2,
+  "pollen": 3,
+  "sonda": "<ID>"
+}
+
+### DELETE advanced
+DELETE http://localhost:3000/api/advanced/<ID> HTTP/1.1

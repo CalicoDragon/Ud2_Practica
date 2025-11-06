@@ -13,7 +13,17 @@ const app = express();
 
 // Middleware
 // app.use(cors);
-// app.use(express.json);
+
+// Source - https://stackoverflow.com/questions/79604374/app-useexpress-json-is-not-working-in-express-version-express5-1-0-but-wo
+// Posted by Sakar
+// Retrieved 2025-11-06, License - CC BY-SA 4.0
+
+app.use((req, res, next) => {
+  express.json()(req, res, (err) => {
+    if (!req.body) req.body = {};
+    next(err);
+  });
+});
 
 // Routes
 app.use("/api", require("./api/routes"));

@@ -1,0 +1,28 @@
+### GET ALL
+GET http://localhost:3000/api/sondas HTTP/1.1
+
+### GET BY ID
+GET http://localhost:3000/api/sondas/<ID> HTTP/1.1
+
+### CREATE sondas
+POST http://localhost:3000/api/sondas HTTP/1.1
+Content-Type: application/json
+
+{
+  "sondaName": "A1",
+  "description": "sonda muy chula",
+  "location": "Madrid"
+}
+
+### UPDATE sondas
+PUT http://localhost:3000/api/sondas/<ID> HTTP/1.1
+Content-Type: application/json
+
+{
+  "sondaName": "A1",
+  "description": "sonda muy chula",
+  "location": "Madrid",
+}
+
+### DELETE sondas
+DELETE http://localhost:3000/api/sondas/<ID> HTTP/1.1
