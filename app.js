@@ -12,11 +12,11 @@ const API_PORT = process.env.API_PORT || 3000;
 const app = express();
 
 // Middleware
-app.use(cors);
-app.use(express.json);
+// app.use(cors);
+// app.use(express.json);
 
 // Routes
-app.use("/api/", require("./api/routes/users.route"));
+app.use("/api", require("./api/routes"));
 
 app.listen(API_PORT, () => {
   console.log(`Server listening on ${API_PORT}...`);
