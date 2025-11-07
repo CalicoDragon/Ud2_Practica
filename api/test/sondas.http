@@ -9,19 +9,19 @@ POST http://localhost:3000/api/sondas HTTP/1.1
 Content-Type: application/json
 
 {
-  "sondaName": "A1",
-  "description": "sonda muy chula",
-  "location": "Madrid"
+  "sondaName": "B2",
+  "description": "sonda funcional",
+  "location": "Valencia"
 }
 
 ### UPDATE sondas
-PUT http://localhost:3000/api/sondas/<ID> HTTP/1.1
+PUT http://localhost:3000/api/sondas/690de89592fa18aff7064f38 HTTP/1.1
 Content-Type: application/json
 
 {
-  "sondaName": "A1",
-  "description": "sonda muy chula",
-  "location": "Madrid",
+  "sondaName": "C3",
+  "description": "funciona",
+  "location": "Cordoba"
 }
 
 ### DELETE sondas
