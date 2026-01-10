@@ -43,14 +43,63 @@ const getUser = async (req, res) => {
 };
 
 // CREATE
-const createUser = async (req, res) => {
+const registerUser = async (req, res) => {
   try {
-    const user = await usersModel.create(req.body);
+    // Almacenamos el body del request temporalmente (parecido a req.body)
+    body = matchedData(req);
 
-    handleHTTPResponse(res, "User created successfully", user);
+    // Generamos la hashedPwd y la metemos en el body
+    const hashedPwd = await hashPassword(body.password);
+    body = { ...body, password: hashedPwd };
+
+    // Almacenamos usuario en la base de datos
+    const user = await usersModel.create(body);
+
+    // Respondemos la HTTP evitando enviar la contraseña
+    user.set("password", undefined, { strict: false });
+    const resData = {
+      token: await tokenSign(user),
+      data: user,
+    };
+
+    handleHTTPResponse(res, "User registered successfully", resData);
   } catch (error) {
-    console.log(`[users.controller > createUser]: ${error}`);
-    handleHTTPError(res, "User could not be created", INTERNAL_SERVER_ERROR);
+    console.log(`[users.controller > registerUser]: ${error}`);
+    handleHTTPError(res, "User could not be registered", INTERNAL_SERVER_ERROR);
+  }
+};
+
+const loginUser = async (req, res) => {
+  try {
+    // Almacenamos el body del request temporalmente (parecido a req.body)
+    body = matchedData(req);
+
+    // Buscamos por mail
+    const user = await usersModel.findOne({ email: body.mail });
+
+    // Check de si existe el usuario
+    if (!user) {
+      handleHTTPError(res, "User does not exist", NOT_FOUND);
+      return;
+    }
+
+    // Check de si coincide la contraseña
+    const check = await comparePassword(body.password, user.password);
+    if (!check) {
+      handleHTTPError(res, "Invalid password", UNAUTHORIZED);
+    }
+
+    // Respondemos la HTTP evitando enviar la contraseña
+    user.set("password", undefined, { strict: false });
+    const resData = {
+      token: await tokenSign(user),
+      data: user,
+    };
+
+    handleHTTPResponse(res, "Authentification Successfull", resData);
+  } catch (error) {
+    console.log(`[users.controller > loginUser]: ${error}`);
+    handleHTTPError(res, "User could not log in", INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -99,4 +148,11 @@ const deleteUser = async (req, res) => {
 };
 
 // Export
-module.exports = { getUsers, getUser, createUser, updateUser, deleteUser };
+module.exports = {
+  getUsers,
+  getUser,
+  registerUser,
+  loginUser,
+  updateUser,
+  deleteUser,
+};
