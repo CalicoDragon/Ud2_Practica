@@ -1,5 +1,13 @@
 // Import
+// Internal
 const ImagesModel = require("../models/images.model");
+const {
+  handleHTTPResponse,
+  handleHTTPError,
+  UNAUTHORIZED,
+  NOT_FOUND,
+  INTERNAL_SERVER_ERROR,
+} = require("../utils/handleResponse.util");
 
 // CRUD functions
 // GET ALL
@@ -7,10 +15,10 @@ const getImages = async (req, res) => {
   try {
     const images = await ImagesModel.find({});
 
-    res.send(images);
+    handleHTTPResponse(res, "Images found successfully", images);
   } catch (error) {
     console.log(`[images.controller > getImages] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    handleHTTPError(res, "Images could not be found", INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -20,10 +28,10 @@ const getImage = async (req, res) => {
     const id = req.params.id;
     const image = await ImagesModel.findById(id);
 
-    res.send(image);
+    handleHTTPResponse(res, "Image found successfully", image);
   } catch (error) {
-    console.log(`[images.controller > getImage] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[images.controller > getImage]: ${error}`);
+    handleHTTPError(res, "Image could not be found", INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -32,10 +40,10 @@ const createImage = async (req, res) => {
   try {
     const image = await ImagesModel.create(req.body);
 
-    res.send(image);
+    handleHTTPResponse(res, "Image created successfully", image);
   } catch (error) {
-    console.log(`[images.controller > createImage] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[images.controller > createImage]: ${error}`);
+    handleHTTPError(res, "Image could not be created", INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -46,13 +54,18 @@ const updateImage = async (req, res) => {
     const image = await ImagesModel.findByIdAndUpdate(id, req.body);
 
     if (!image) {
-      res.status(404).send("image not found");
+      handleHTTPError(
+        res,
+        "Image could not be updated because it doesn't exist",
+        NOT_FOUND
+      );
+      return;
     }
 
-    res.send(image);
+    handleHTTPResponse(res, "Image updated successfully", image);
   } catch (error) {
-    console.log(`[images.controller > updateImage] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[images.controller > updateImage]: ${error}`);
+    handleHTTPError(res, "Image could not be updated", INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -63,13 +76,18 @@ const deleteImage = async (req, res) => {
     const image = await ImagesModel.findByIdAndDelete(id);
 
     if (!image) {
-      res.status(404).send("image not found");
+      handleHTTPError(
+        res,
+        "Image could not be deleted because it doesn't exist",
+        NOT_FOUND
+      );
+      return;
     }
 
-    res.send(image);
+    handleHTTPResponse(res, "Image deleted successfully", image);
   } catch (error) {
-    console.log(`[images.controller > deleteImage] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[images.controller > deleteImage]: ${error}`);
+    handleHTTPError(res, "Image could not be deleted", INTERNAL_SERVER_ERROR);
   }
 };
 

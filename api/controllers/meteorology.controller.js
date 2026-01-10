@@ -1,5 +1,13 @@
 // Import
+// Internal
 const MeteorologyModel = require("../models/meteorology.model");
+const {
+  handleHTTPResponse,
+  handleHTTPError,
+  UNAUTHORIZED,
+  NOT_FOUND,
+  INTERNAL_SERVER_ERROR,
+} = require("../utils/handleResponse.util");
 
 // CRUD functions
 // GET ALL
@@ -7,10 +15,14 @@ const getMeteorologys = async (req, res) => {
   try {
     const meteorologys = await MeteorologyModel.find({});
 
-    res.send(meteorologys);
+    handleHTTPResponse(res, "Meteorologys found successfully", meteorologys);
   } catch (error) {
-    console.log(`[meteorologys.controller > getMeteorologys] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[meteorologys.controller > getMeteorologys]: ${error}`);
+    handleHTTPError(
+      res,
+      "Meteorologys could not be found",
+      INTERNAL_SERVER_ERROR
+    );
   }
 };
 
@@ -20,10 +32,14 @@ const getMeteorology = async (req, res) => {
     const id = req.params.id;
     const meteorology = await MeteorologyModel.findById(id);
 
-    res.send(meteorology);
+    handleHTTPResponse(res, "Meteorology found successfully", meteorology);
   } catch (error) {
-    console.log(`[meteorologys.controller > getMeteorology] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[meteorologys.controller > getMeteorology]: ${error}`);
+    handleHTTPError(
+      res,
+      "Meteorology could not be found",
+      INTERNAL_SERVER_ERROR
+    );
   }
 };
 
@@ -32,12 +48,14 @@ const createMeteorology = async (req, res) => {
   try {
     const meteorology = await MeteorologyModel.create(req.body);
 
-    res.send(meteorology);
+    handleHTTPResponse(res, "Meteorology created successfully", meteorology);
   } catch (error) {
-    console.log(
-      `[meteorologys.controller > createMeteorology] ERROR: ${error}`
+    console.log(`[meteorologys.controller > createMeteorology]: ${error}`);
+    handleHTTPError(
+      res,
+      "Meteorology could not be created",
+      INTERNAL_SERVER_ERROR
     );
-    res.status(500).send({ error: "Something broke!" });
   }
 };
 
@@ -48,15 +66,22 @@ const updateMeteorology = async (req, res) => {
     const meteorology = await MeteorologyModel.findByIdAndUpdate(id, req.body);
 
     if (!meteorology) {
-      res.status(404).send("meteorology not found");
+      handleHTTPError(
+        res,
+        "Meteorology could not be updated because it doesn't exist",
+        NOT_FOUND
+      );
+      return;
     }
 
-    res.send(meteorology);
+    handleHTTPResponse(res, "Meteorology updated successfully", meteorology);
   } catch (error) {
-    console.log(
-      `[meteorologys.controller > updateMeteorology] ERROR: ${error}`
+    console.log(`[meteorologys.controller > updateMeteorology]: ${error}`);
+    handleHTTPError(
+      res,
+      "Meteorology could not be updated",
+      INTERNAL_SERVER_ERROR
     );
-    res.status(500).send({ error: "Something broke!" });
   }
 };
 
@@ -67,15 +92,22 @@ const deleteMeteorology = async (req, res) => {
     const meteorology = await MeteorologyModel.findByIdAndDelete(id);
 
     if (!meteorology) {
-      res.status(404).send("meteorology not found");
+      handleHTTPError(
+        res,
+        "Meteorology could not be deleted because it doesn't exist",
+        NOT_FOUND
+      );
+      return;
     }
 
-    res.send(meteorology);
+    handleHTTPResponse(res, "Meteorology deleted successfully", meteorology);
   } catch (error) {
-    console.log(
-      `[meteorologys.controller > deleteMeteorology] ERROR: ${error}`
+    console.log(`[meteorologys.controller > deleteMeteorology]: ${error}`);
+    handleHTTPError(
+      res,
+      "Meteorology could not be deleted",
+      INTERNAL_SERVER_ERROR
     );
-    res.status(500).send({ error: "Something broke!" });
   }
 };
 

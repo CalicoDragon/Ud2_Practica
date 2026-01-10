@@ -1,5 +1,13 @@
 // Import
+//Internal
 const WindModel = require("../models/wind.model");
+const {
+  handleHTTPResponse,
+  handleHTTPError,
+  UNAUTHORIZED,
+  NOT_FOUND,
+  INTERNAL_SERVER_ERROR,
+} = require("../utils/handleResponse.util");
 
 // CRUD functions
 // GET ALL
@@ -7,10 +15,10 @@ const getWinds = async (req, res) => {
   try {
     const winds = await WindModel.find({});
 
-    res.send(winds);
+    handleHTTPResponse(res, "Winds found successfully", winds);
   } catch (error) {
-    console.log(`[winds.controller > getWinds] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[winds.controller > getWinds]: ${error}`);
+    handleHTTPError(res, "Winds could not be found", INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -20,10 +28,10 @@ const getWind = async (req, res) => {
     const id = req.params.id;
     const wind = await WindModel.findById(id);
 
-    res.send(wind);
+    handleHTTPResponse(res, "Wind found successfully", wind);
   } catch (error) {
-    console.log(`[winds.controller > getWind] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[winds.controller > getWind]: ${error}`);
+    handleHTTPError(res, "Wind could not be found", INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -32,10 +40,10 @@ const createWind = async (req, res) => {
   try {
     const wind = await WindModel.create(req.body);
 
-    res.send(wind);
+    handleHTTPResponse(res, "Wind created successfully", wind);
   } catch (error) {
-    console.log(`[winds.controller > createWind] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[winds.controller > createWind]: ${error}`);
+    handleHTTPError(res, "Wind could not be created", INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -46,13 +54,18 @@ const updateWind = async (req, res) => {
     const wind = await WindModel.findByIdAndUpdate(id, req.body);
 
     if (!wind) {
-      res.status(404).send("wind not found");
+      handleHTTPError(
+        res,
+        "Wind could not be updated because it doesn't exist",
+        NOT_FOUND
+      );
+      return;
     }
 
-    res.send(wind);
+    handleHTTPResponse(res, "Wind updated successfully", wind);
   } catch (error) {
-    console.log(`[winds.controller > updateWind] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[winds.controller > updateWind]: ${error}`);
+    handleHTTPError(res, "Wind could not be updated", INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -63,13 +76,18 @@ const deleteWind = async (req, res) => {
     const wind = await WindModel.findByIdAndDelete(id);
 
     if (!wind) {
-      res.status(404).send("wind not found");
+      handleHTTPError(
+        res,
+        "Wind could not be deleted because it doesn't exist",
+        NOT_FOUND
+      );
+      return;
     }
 
-    res.send(wind);
+    handleHTTPResponse(res, "Wind deleted successfully", wind);
   } catch (error) {
-    console.log(`[winds.controller > deleteWind] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[winds.controller > deleteWind]: ${error}`);
+    handleHTTPError(res, "Wind could not be deleted", INTERNAL_SERVER_ERROR);
   }
 };
 

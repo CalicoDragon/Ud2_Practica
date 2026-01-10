@@ -1,5 +1,13 @@
 // Import
+// Internal
 const PrecipitationModel = require("../models/precipitation.model");
+const {
+  handleHTTPResponse,
+  handleHTTPError,
+  UNAUTHORIZED,
+  NOT_FOUND,
+  INTERNAL_SERVER_ERROR,
+} = require("../utils/handleResponse.util");
 
 // CRUD functions
 // GET ALL
@@ -7,12 +15,18 @@ const getPrecipitations = async (req, res) => {
   try {
     const precipitations = await PrecipitationModel.find({});
 
-    res.send(precipitations);
-  } catch (error) {
-    console.log(
-      `[precipitations.controller > getPrecipitations] ERROR: ${error}`
+    handleHTTPResponse(
+      res,
+      "Precipitations found successfully",
+      precipitations
     );
-    res.status(500).send({ error: "Something broke!" });
+  } catch (error) {
+    console.log(`[precipitations.controller > getPrecipitations]: ${error}`);
+    handleHTTPError(
+      res,
+      "Precipitations could not be found",
+      INTERNAL_SERVER_ERROR
+    );
   }
 };
 
@@ -22,12 +36,14 @@ const getPrecipitation = async (req, res) => {
     const id = req.params.id;
     const precipitation = await PrecipitationModel.findById(id);
 
-    res.send(precipitation);
+    handleHTTPResponse(res, "Precipitation found successfully", precipitation);
   } catch (error) {
-    console.log(
-      `[precipitations.controller > getPrecipitation] ERROR: ${error}`
+    console.log(`[precipitations.controller > getPrecipitation]: ${error}`);
+    handleHTTPError(
+      res,
+      "Precipitation could not be found",
+      INTERNAL_SERVER_ERROR
     );
-    res.status(500).send({ error: "Something broke!" });
   }
 };
 
@@ -36,12 +52,18 @@ const createPrecipitation = async (req, res) => {
   try {
     const precipitation = await PrecipitationModel.create(req.body);
 
-    res.send(precipitation);
-  } catch (error) {
-    console.log(
-      `[precipitations.controller > createPrecipitation] ERROR: ${error}`
+    handleHTTPResponse(
+      res,
+      "Precipitation created successfully",
+      precipitation
     );
-    res.status(500).send({ error: "Something broke!" });
+  } catch (error) {
+    console.log(`[precipitations.controller > createPrecipitation]: ${error}`);
+    handleHTTPError(
+      res,
+      "Precipitation could not be created",
+      INTERNAL_SERVER_ERROR
+    );
   }
 };
 
@@ -55,15 +77,26 @@ const updatePrecipitation = async (req, res) => {
     );
 
     if (!precipitation) {
-      res.status(404).send("precipitation not found");
+      handleHTTPError(
+        res,
+        "Precipitation could not be updated because it doesn't exist",
+        NOT_FOUND
+      );
+      return;
     }
 
-    res.send(precipitation);
-  } catch (error) {
-    console.log(
-      `[precipitations.controller > updatePrecipitation] ERROR: ${error}`
+    handleHTTPResponse(
+      res,
+      "Precipitation updated successfully",
+      precipitation
     );
-    res.status(500).send({ error: "Something broke!" });
+  } catch (error) {
+    console.log(`[precipitations.controller > updatePrecipitation]: ${error}`);
+    handleHTTPError(
+      res,
+      "Precipitation could not be updated",
+      INTERNAL_SERVER_ERROR
+    );
   }
 };
 
@@ -74,15 +107,26 @@ const deletePrecipitation = async (req, res) => {
     const precipitation = await PrecipitationModel.findByIdAndDelete(id);
 
     if (!precipitation) {
-      res.status(404).send("precipitation not found");
+      handleHTTPError(
+        res,
+        "Precipitation could not be deleted because it doesn't exist",
+        NOT_FOUND
+      );
+      return;
     }
 
-    res.send(precipitation);
-  } catch (error) {
-    console.log(
-      `[precipitations.controller > deletePrecipitation] ERROR: ${error}`
+    handleHTTPResponse(
+      res,
+      "Precipitation deleted successfully",
+      precipitation
     );
-    res.status(500).send({ error: "Something broke!" });
+  } catch (error) {
+    console.log(`[precipitations.controller > deletePrecipitation]: ${error}`);
+    handleHTTPError(
+      res,
+      "Precipitation could not be deleted",
+      INTERNAL_SERVER_ERROR
+    );
   }
 };
 

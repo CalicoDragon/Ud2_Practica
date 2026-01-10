@@ -1,5 +1,13 @@
 // Import
+// Internal
 const HumidityModel = require("../models/humidity.model");
+const {
+  handleHTTPResponse,
+  handleHTTPError,
+  UNAUTHORIZED,
+  NOT_FOUND,
+  INTERNAL_SERVER_ERROR,
+} = require("../utils/handleResponse.util");
 
 // CRUD functions
 // GET ALL
@@ -7,10 +15,14 @@ const getHumiditys = async (req, res) => {
   try {
     const humiditys = await HumidityModel.find({});
 
-    res.send(humiditys);
+    handleHTTPResponse(res, "Humiditys found successfully", humiditys);
   } catch (error) {
-    console.log(`[humiditys.controller > getHumiditys] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[humiditys.controller > getHumiditys]: ${error}`);
+    handleHTTPError(
+      res,
+      "Humiditys could not be deleted",
+      INTERNAL_SERVER_ERROR
+    );
   }
 };
 
@@ -20,10 +32,10 @@ const getHumidity = async (req, res) => {
     const id = req.params.id;
     const humidity = await HumidityModel.findById(id);
 
-    res.send(humidity);
+    handleHTTPResponse(res, "Humidity found successfully", humidity);
   } catch (error) {
-    console.log(`[humiditys.controller > getHumidity] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[humiditys.controller > getHumidity]: ${error}`);
+    handleHTTPError(res, "Humidity could not be found", INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -32,10 +44,14 @@ const createHumidity = async (req, res) => {
   try {
     const humidity = await HumidityModel.create(req.body);
 
-    res.send(humidity);
+    handleHTTPResponse(res, "Humidity created successfully", humidity);
   } catch (error) {
     console.log(`[humiditys.controller > createHumidity] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    handleHTTPError(
+      res,
+      "Humidity could not be created",
+      INTERNAL_SERVER_ERROR
+    );
   }
 };
 
@@ -46,13 +62,22 @@ const updateHumidity = async (req, res) => {
     const humidity = await HumidityModel.findByIdAndUpdate(id, req.body);
 
     if (!humidity) {
-      res.status(404).send("humidity not found");
+      handleHTTPError(
+        res,
+        "Humidity could not be updated because it doesn't exist",
+        NOT_FOUND
+      );
+      return;
     }
 
-    res.send(humidity);
+    handleHTTPResponse(res, "Humidity updated successfully", humidity);
   } catch (error) {
-    console.log(`[humiditys.controller > updateHumidity] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[humiditys.controller > updateHumidity]: ${error}`);
+    handleHTTPError(
+      res,
+      "Humidity could not be updated",
+      INTERNAL_SERVER_ERROR
+    );
   }
 };
 
@@ -63,13 +88,22 @@ const deleteHumidity = async (req, res) => {
     const humidity = await HumidityModel.findByIdAndDelete(id);
 
     if (!humidity) {
-      res.status(404).send("humidity not found");
+      handleHTTPError(
+        res,
+        "Humidity could not be deleted because it doesn't exist",
+        NOT_FOUND
+      );
+      return;
     }
 
-    res.send(humidity);
+    handleHTTPResponse(res, "Humidity deleted successfully", humidity);
   } catch (error) {
-    console.log(`[humiditys.controller > deleteHumidity] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[humiditys.controller > deleteHumidity]: ${error}`);
+    handleHTTPError(
+      res,
+      "Humidity could not be deleted",
+      INTERNAL_SERVER_ERROR
+    );
   }
 };
 

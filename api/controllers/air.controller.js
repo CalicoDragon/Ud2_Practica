@@ -1,5 +1,13 @@
 // Import
+// Internal
 const AirModel = require("../models/air.model");
+const {
+  handleHTTPResponse,
+  handleHTTPError,
+  UNAUTHORIZED,
+  NOT_FOUND,
+  INTERNAL_SERVER_ERROR,
+} = require("../utils/handleResponse.util");
 
 // CRUD functions
 // GET ALL
@@ -7,10 +15,10 @@ const getAirs = async (req, res) => {
   try {
     const airs = await AirModel.find({});
 
-    res.send(airs);
+    handleHTTPResponse(res, "Airs found successfully", airs);
   } catch (error) {
-    console.log(`[airs.controller > getAirs] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[airs.controller > getAirs]: ${error}`);
+    handleHTTPError(res, "Airs could not be found", INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -20,10 +28,10 @@ const getAir = async (req, res) => {
     const id = req.params.id;
     const air = await AirModel.findById(id);
 
-    res.send(air);
+    handleHTTPResponse(res, "Air found successfully", air);
   } catch (error) {
-    console.log(`[airs.controller > getAir] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[airs.controller > getAir]: ${error}`);
+    handleHTTPError(res, "Air could not be found", INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -32,10 +40,10 @@ const createAir = async (req, res) => {
   try {
     const air = await AirModel.create(req.body);
 
-    res.send(air);
+    handleHTTPResponse(res, "Air created successfully", air);
   } catch (error) {
-    console.log(`[airs.controller > createAir] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[airs.controller > createAir]: ${error}`);
+    handleHTTPError(res, "Air could not be created", INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -46,13 +54,18 @@ const updateAir = async (req, res) => {
     const air = await AirModel.findByIdAndUpdate(id, req.body);
 
     if (!air) {
-      res.status(404).send("air not found");
+      handleHTTPError(
+        res,
+        "Air could not be updated because it doesn't exist",
+        NOT_FOUND
+      );
+      return;
     }
 
-    res.send(air);
+    handleHTTPResponse(res, "Air updated successfully", air);
   } catch (error) {
-    console.log(`[airs.controller > updateAir] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[airs.controller > updateAir]: ${error}`);
+    handleHTTPError(res, "Air could not be updated", INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -63,13 +76,18 @@ const deleteAir = async (req, res) => {
     const air = await AirModel.findByIdAndDelete(id);
 
     if (!air) {
-      res.status(404).send("air not found");
+      handleHTTPError(
+        res,
+        "Air could not be deleted because it doesn't exist",
+        NOT_FOUND
+      );
+      return;
     }
 
-    res.send(air);
+    handleHTTPResponse(res, "Air deleted successfully", air);
   } catch (error) {
-    console.log(`[airs.controller > deleteAir] ERROR: ${error}`);
-    res.status(500).send({ error: "Something broke!" });
+    console.log(`[airs.controller > deleteAir]: ${error}`);
+    handleHTTPError(res, "Air could not be deleted", INTERNAL_SERVER_ERROR);
   }
 };
 
