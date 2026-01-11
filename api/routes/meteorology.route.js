@@ -15,15 +15,17 @@ const {
   validatorDeleteItem,
 } = require("../validators/wind.validator");
 
+const authMiddleware = require("../middlewares/session.middleware");
+
 // Consts
 const router = express.Router();
 
 // Routes
 router.get("/", getMeteorologys);
 router.get("/:id", validatorGetItem, getMeteorology);
-router.post("/", validatorCreateItem, createMeteorology);
-router.put("/:id", validatorUpdateItem, updateMeteorology);
-router.delete("/:id", validatorDeleteItem, deleteMeteorology);
+router.post("/", authMiddleware, validatorCreateItem, createMeteorology);
+router.put("/:id", authMiddleware, validatorUpdateItem, updateMeteorology);
+router.delete("/:id", authMiddleware, validatorDeleteItem, deleteMeteorology);
 
 // Export
 module.exports = router;
