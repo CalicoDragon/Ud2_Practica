@@ -6,16 +6,24 @@ const {
   createPrecipitation,
   updatePrecipitation,
   deletePrecipitation,
-} = require("../controllers/Precipitation.controller");
+} = require("../controllers/precipitation.controller");
 
+const {
+  validatorGetItem,
+  validatorCreateItem,
+  validatorUpdateItem,
+  validatorDeleteItem,
+} = require("../validators/wind.validator");
+
+// Consts
 const router = express.Router();
 
 // Routes
 router.get("/", getPrecipitations);
-router.get("/:id", getPrecipitation);
-router.post("/", createPrecipitation);
-router.put("/:id", updatePrecipitation);
-router.delete("/:id", deletePrecipitation);
+router.get("/:id", validatorGetItem, getPrecipitation);
+router.post("/", validatorCreateItem, createPrecipitation);
+router.put("/:id", validatorUpdateItem, updatePrecipitation);
+router.delete("/:id", validatorDeleteItem, deletePrecipitation);
 
 // Export
 module.exports = router;

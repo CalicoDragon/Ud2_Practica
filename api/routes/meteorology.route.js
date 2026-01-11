@@ -6,16 +6,24 @@ const {
   createMeteorology,
   updateMeteorology,
   deleteMeteorology,
-} = require("../controllers/Meteorology.controller");
+} = require("../controllers/meteorology.controller");
 
+const {
+  validatorGetItem,
+  validatorCreateItem,
+  validatorUpdateItem,
+  validatorDeleteItem,
+} = require("../validators/wind.validator");
+
+// Consts
 const router = express.Router();
 
 // Routes
 router.get("/", getMeteorologys);
-router.get("/:id", getMeteorology);
-router.post("/", createMeteorology);
-router.put("/:id", updateMeteorology);
-router.delete("/:id", deleteMeteorology);
+router.get("/:id", validatorGetItem, getMeteorology);
+router.post("/", validatorCreateItem, createMeteorology);
+router.put("/:id", validatorUpdateItem, updateMeteorology);
+router.delete("/:id", validatorDeleteItem, deleteMeteorology);
 
 // Export
 module.exports = router;

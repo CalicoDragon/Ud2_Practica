@@ -1,5 +1,6 @@
 // Import
 // Internal
+const { matchedData } = require("express-validator");
 const PrecipitationModel = require("../models/precipitation.model");
 const {
   handleHTTPResponse,
@@ -33,7 +34,7 @@ const getPrecipitations = async (req, res) => {
 // GET BY ID
 const getPrecipitation = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const precipitation = await PrecipitationModel.findById(id);
 
     handleHTTPResponse(res, "Precipitation found successfully", precipitation);
@@ -50,7 +51,7 @@ const getPrecipitation = async (req, res) => {
 // CREATE
 const createPrecipitation = async (req, res) => {
   try {
-    const precipitation = await PrecipitationModel.create(req.body);
+    const precipitation = await PrecipitationModel.create(matchedData(req));
 
     handleHTTPResponse(
       res,
@@ -70,11 +71,8 @@ const createPrecipitation = async (req, res) => {
 // UPDATE
 const updatePrecipitation = async (req, res) => {
   try {
-    const id = req.params.id;
-    const precipitation = await PrecipitationModel.findByIdAndUpdate(
-      id,
-      req.body
-    );
+    const { id, ...body } = matchedData(req);
+    const precipitation = await PrecipitationModel.findByIdAndUpdate(id, body);
 
     if (!precipitation) {
       handleHTTPError(
@@ -103,7 +101,7 @@ const updatePrecipitation = async (req, res) => {
 // DELETE
 const deletePrecipitation = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const precipitation = await PrecipitationModel.findByIdAndDelete(id);
 
     if (!precipitation) {

@@ -1,5 +1,6 @@
 // Import
 // Internal
+const { matchedData } = require("express-validator");
 const advancedModel = require("../models/advanced.model");
 const {
   handleHTTPResponse,
@@ -25,7 +26,7 @@ const getAdvanceds = async (req, res) => {
 // GET BY ID
 const getAdvanced = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const advanced = await advancedModel.findById(id);
 
     handleHTTPResponse(res, "Advanced found successfully", advanced);
@@ -38,7 +39,7 @@ const getAdvanced = async (req, res) => {
 // CREATE
 const createAdvanced = async (req, res) => {
   try {
-    const advanced = await advancedModel.create(req.body);
+    const advanced = await advancedModel.create(matchedData(req));
 
     handleHTTPResponse(res, "Advanced created successfully", advanced);
   } catch (error) {
@@ -54,8 +55,8 @@ const createAdvanced = async (req, res) => {
 // UPDATE
 const updateAdvanced = async (req, res) => {
   try {
-    const id = req.params.id;
-    const advanced = await advancedModel.findByIdAndUpdate(id, req.body);
+    const { id, ...body } = matchedData(req);
+    const advanced = await advancedModel.findByIdAndUpdate(id, body);
 
     if (!advanced) {
       handleHTTPError(
@@ -80,7 +81,7 @@ const updateAdvanced = async (req, res) => {
 // DELETE
 const deleteAdvanced = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const advanced = await advancedModel.findByIdAndDelete(id);
 
     if (!advanced) {

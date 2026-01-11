@@ -1,5 +1,6 @@
 // Import
 // Internal
+const { matchedData } = require("express-validator");
 const MeteorologyModel = require("../models/meteorology.model");
 const {
   handleHTTPResponse,
@@ -29,7 +30,7 @@ const getMeteorologys = async (req, res) => {
 // GET BY ID
 const getMeteorology = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const meteorology = await MeteorologyModel.findById(id);
 
     handleHTTPResponse(res, "Meteorology found successfully", meteorology);
@@ -46,7 +47,7 @@ const getMeteorology = async (req, res) => {
 // CREATE
 const createMeteorology = async (req, res) => {
   try {
-    const meteorology = await MeteorologyModel.create(req.body);
+    const meteorology = await MeteorologyModel.create(matchedData(req));
 
     handleHTTPResponse(res, "Meteorology created successfully", meteorology);
   } catch (error) {
@@ -62,8 +63,8 @@ const createMeteorology = async (req, res) => {
 // UPDATE
 const updateMeteorology = async (req, res) => {
   try {
-    const id = req.params.id;
-    const meteorology = await MeteorologyModel.findByIdAndUpdate(id, req.body);
+    const { id, ...body } = matchedData(req);
+    const meteorology = await MeteorologyModel.findByIdAndUpdate(id, body);
 
     if (!meteorology) {
       handleHTTPError(
@@ -88,7 +89,7 @@ const updateMeteorology = async (req, res) => {
 // DELETE
 const deleteMeteorology = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const meteorology = await MeteorologyModel.findByIdAndDelete(id);
 
     if (!meteorology) {

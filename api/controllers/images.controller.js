@@ -1,6 +1,6 @@
 // Import
 // Internal
-const ImagesModel = require("../models/images.model");
+const { matchedData } = require("express-validator");
 const {
   handleHTTPResponse,
   handleHTTPError,
@@ -25,7 +25,7 @@ const getImages = async (req, res) => {
 // GET BY ID
 const getImage = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const image = await ImagesModel.findById(id);
 
     handleHTTPResponse(res, "Image found successfully", image);
@@ -38,7 +38,7 @@ const getImage = async (req, res) => {
 // CREATE
 const createImage = async (req, res) => {
   try {
-    const image = await ImagesModel.create(req.body);
+    const image = await ImagesModel.create(matchedData(req));
 
     handleHTTPResponse(res, "Image created successfully", image);
   } catch (error) {
@@ -50,8 +50,8 @@ const createImage = async (req, res) => {
 // UPDATE
 const updateImage = async (req, res) => {
   try {
-    const id = req.params.id;
-    const image = await ImagesModel.findByIdAndUpdate(id, req.body);
+    const { id, ...body } = matchedData(req);
+    const image = await ImagesModel.findByIdAndUpdate(id, body);
 
     if (!image) {
       handleHTTPError(
@@ -72,7 +72,7 @@ const updateImage = async (req, res) => {
 // DELETE
 const deleteImage = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const image = await ImagesModel.findByIdAndDelete(id);
 
     if (!image) {

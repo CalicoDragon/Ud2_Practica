@@ -1,5 +1,6 @@
 // Import
 // Internal
+const { matchedData } = require("express-validator");
 const HumidityModel = require("../models/humidity.model");
 const {
   handleHTTPResponse,
@@ -29,7 +30,7 @@ const getHumiditys = async (req, res) => {
 // GET BY ID
 const getHumidity = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const humidity = await HumidityModel.findById(id);
 
     handleHTTPResponse(res, "Humidity found successfully", humidity);
@@ -42,7 +43,7 @@ const getHumidity = async (req, res) => {
 // CREATE
 const createHumidity = async (req, res) => {
   try {
-    const humidity = await HumidityModel.create(req.body);
+    const humidity = await HumidityModel.create(matchedData(req));
 
     handleHTTPResponse(res, "Humidity created successfully", humidity);
   } catch (error) {
@@ -58,8 +59,8 @@ const createHumidity = async (req, res) => {
 // UPDATE
 const updateHumidity = async (req, res) => {
   try {
-    const id = req.params.id;
-    const humidity = await HumidityModel.findByIdAndUpdate(id, req.body);
+    const { id, ...body } = matchedData(req);
+    const humidity = await HumidityModel.findByIdAndUpdate(id, body);
 
     if (!humidity) {
       handleHTTPError(
@@ -84,7 +85,7 @@ const updateHumidity = async (req, res) => {
 // DELETE
 const deleteHumidity = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const humidity = await HumidityModel.findByIdAndDelete(id);
 
     if (!humidity) {

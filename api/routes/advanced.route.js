@@ -6,16 +6,24 @@ const {
   createAdvanced,
   updateAdvanced,
   deleteAdvanced,
-} = require("../controllers/Advanced.controller");
+} = require("../controllers/advanced.controller");
 
+const {
+  validatorGetItem,
+  validatorCreateItem,
+  validatorUpdateItem,
+  validatorDeleteItem,
+} = require("../validators/wind.validator");
+
+// Consts
 const router = express.Router();
 
 // Routes
 router.get("/", getAdvanceds);
-router.get("/:id", getAdvanced);
-router.post("/", createAdvanced);
-router.put("/:id", updateAdvanced);
-router.delete("/:id", deleteAdvanced);
+router.get("/:id", validatorGetItem, getAdvanced);
+router.post("/", validatorCreateItem, createAdvanced);
+router.put("/:id", validatorUpdateItem, updateAdvanced);
+router.delete("/:id", validatorDeleteItem, deleteAdvanced);
 
 // Export
 module.exports = router;

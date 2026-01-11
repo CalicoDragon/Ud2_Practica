@@ -1,5 +1,6 @@
 // Import
 // Internal
+const { matchedData } = require("express-validator");
 const AirModel = require("../models/air.model");
 const {
   handleHTTPResponse,
@@ -25,7 +26,7 @@ const getAirs = async (req, res) => {
 // GET BY ID
 const getAir = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const air = await AirModel.findById(id);
 
     handleHTTPResponse(res, "Air found successfully", air);
@@ -38,7 +39,7 @@ const getAir = async (req, res) => {
 // CREATE
 const createAir = async (req, res) => {
   try {
-    const air = await AirModel.create(req.body);
+    const air = await AirModel.create(matchedData(req));
 
     handleHTTPResponse(res, "Air created successfully", air);
   } catch (error) {
@@ -50,8 +51,8 @@ const createAir = async (req, res) => {
 // UPDATE
 const updateAir = async (req, res) => {
   try {
-    const id = req.params.id;
-    const air = await AirModel.findByIdAndUpdate(id, req.body);
+    const { id, ...body } = matchedData(req);
+    const air = await AirModel.findByIdAndUpdate(id, body);
 
     if (!air) {
       handleHTTPError(
@@ -72,7 +73,7 @@ const updateAir = async (req, res) => {
 // DELETE
 const deleteAir = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const air = await AirModel.findByIdAndDelete(id);
 
     if (!air) {

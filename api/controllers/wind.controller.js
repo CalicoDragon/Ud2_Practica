@@ -1,5 +1,6 @@
 // Import
 //Internal
+const { matchedData } = require("express-validator");
 const WindModel = require("../models/wind.model");
 const {
   handleHTTPResponse,
@@ -25,7 +26,7 @@ const getWinds = async (req, res) => {
 // GET BY ID
 const getWind = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const wind = await WindModel.findById(id);
 
     handleHTTPResponse(res, "Wind found successfully", wind);
@@ -38,7 +39,7 @@ const getWind = async (req, res) => {
 // CREATE
 const createWind = async (req, res) => {
   try {
-    const wind = await WindModel.create(req.body);
+    const wind = await WindModel.create(matchedData(req));
 
     handleHTTPResponse(res, "Wind created successfully", wind);
   } catch (error) {
@@ -50,8 +51,8 @@ const createWind = async (req, res) => {
 // UPDATE
 const updateWind = async (req, res) => {
   try {
-    const id = req.params.id;
-    const wind = await WindModel.findByIdAndUpdate(id, req.body);
+    const { id, ...body } = matchedData(req);
+    const wind = await WindModel.findByIdAndUpdate(id, body);
 
     if (!wind) {
       handleHTTPError(
@@ -72,7 +73,7 @@ const updateWind = async (req, res) => {
 // DELETE
 const deleteWind = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const wind = await WindModel.findByIdAndDelete(id);
 
     if (!wind) {

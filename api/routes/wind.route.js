@@ -6,16 +6,24 @@ const {
   createWind,
   updateWind,
   deleteWind,
-} = require("../controllers/Wind.controller");
+} = require("../controllers/wind.controller");
 
+const {
+  validatorGetItem,
+  validatorCreateItem,
+  validatorUpdateItem,
+  validatorDeleteItem,
+} = require("../validators/wind.validator");
+
+// Consts
 const router = express.Router();
 
 // Routes
 router.get("/", getWinds);
-router.get("/:id", getWind);
-router.post("/", createWind);
-router.put("/:id", updateWind);
-router.delete("/:id", deleteWind);
+router.get("/:id", validatorGetItem, getWind);
+router.post("/", validatorCreateItem, createWind);
+router.put("/:id", validatorUpdateItem, updateWind);
+router.delete("/:id", validatorDeleteItem, deleteWind);
 
 // Export
 module.exports = router;

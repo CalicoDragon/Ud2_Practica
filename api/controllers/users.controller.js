@@ -32,7 +32,7 @@ const getUsers = async (req, res) => {
 // GET BY ID
 const getUser = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const user = await usersModel.findById(id);
 
     handleHTTPResponse(res, "User found successfully", user);
@@ -106,8 +106,8 @@ const loginUser = async (req, res) => {
 // UPDATE
 const updateUser = async (req, res) => {
   try {
-    const id = req.params.id;
-    const user = await usersModel.findByIdAndUpdate(id, req.body);
+    const { id, ...body } = matchedData(req);
+    const user = await usersModel.findByIdAndUpdate(id, body);
 
     if (!user) {
       handleHTTPError(
@@ -128,7 +128,7 @@ const updateUser = async (req, res) => {
 // DELETE
 const deleteUser = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const user = await usersModel.findByIdAndDelete(id);
 
     if (!user) {

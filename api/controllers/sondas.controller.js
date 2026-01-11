@@ -1,5 +1,6 @@
 // Import
 // Internal
+const { matchedData } = require("express-validator");
 const SondasModel = require("../models/sondas.model");
 const {
   handleHTTPResponse,
@@ -25,7 +26,7 @@ const getSondas = async (req, res) => {
 // GET BY ID
 const getSonda = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const sonda = await SondasModel.findById(id);
 
     handleHTTPResponse(res, "Sonda found successfully", sonda);
@@ -38,7 +39,7 @@ const getSonda = async (req, res) => {
 // CREATE
 const createSonda = async (req, res) => {
   try {
-    const sonda = await SondasModel.create(req.body);
+    const sonda = await SondasModel.create(matchedData(req));
 
     handleHTTPResponse(res, "Sonda created successfully", sonda);
   } catch (error) {
@@ -50,8 +51,8 @@ const createSonda = async (req, res) => {
 // UPDATE
 const updateSonda = async (req, res) => {
   try {
-    const id = req.params.id;
-    const sonda = await SondasModel.findByIdAndUpdate(id, req.body);
+    const { id, ...body } = matchedData(req);
+    const sonda = await SondasModel.findByIdAndUpdate(id, body);
 
     if (!sonda) {
       handleHTTPError(
@@ -72,7 +73,7 @@ const updateSonda = async (req, res) => {
 // DELETE
 const deleteSonda = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = matchedData(req);
     const sonda = await SondasModel.findByIdAndDelete(id);
 
     if (!sonda) {
