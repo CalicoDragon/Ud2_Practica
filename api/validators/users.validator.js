@@ -14,10 +14,10 @@ const validatorGetItem = [
 ];
 
 const validatorCreateItem = [
-  check("username").exists().notEmpty(),
-  check("fullName").exists().notEmpty(),
-  check("email").exists().notEmpty(),
-  check("password").exists().notEmpty(),
+  check("username").exists().notEmpty().isLength({ min: 3, max: 99 }),
+  check("fullName").exists().notEmpty().isLength({ min: 3, max: 99 }),
+  check("email").exists().notEmpty().isEmail(),
+  check("password").exists().notEmpty().isLength({ min: 8, max: 30 }),
 
   (req, res, next) => {
     return validateResults(res, req, next);
@@ -27,10 +27,10 @@ const validatorCreateItem = [
 const validatorUpdateItem = [
   check("id").exists().notEmpty().isMongoId(),
 
-  check("username").exists().notEmpty(),
-  check("fullName").exists().notEmpty(),
-  check("email").exists().notEmpty(),
-  check("password").exists().notEmpty(),
+  check("username").exists().notEmpty().isLength({ min: 3, max: 99 }),
+  check("fullName").exists().notEmpty().isLength({ min: 3, max: 99 }),
+  check("email").exists().notEmpty().isEmail(),
+  check("password").exists().notEmpty().isLength({ min: 8, max: 30 }),
 
   (req, res, next) => {
     return validateResults(res, req, next);
@@ -45,10 +45,20 @@ const validatorDeleteItem = [
   },
 ];
 
+const validatorLogin = [
+  check("email").exists().notEmpty().isEmail(),
+  check("password").exists().notEmpty().isLength({ min: 8, max: 30 }),
+
+  (req, res, next) => {
+    return validateResults(res, req, next);
+  },
+];
+
 // Export
 module.exports = {
   validatorGetItem,
   validatorCreateItem,
   validatorUpdateItem,
   validatorDeleteItem,
+  validatorLogin,
 };

@@ -75,7 +75,7 @@ const loginUser = async (req, res) => {
     body = matchedData(req);
 
     // Buscamos por mail
-    const user = await usersModel.findOne({ email: body.mail });
+    const user = await usersModel.findOne({ email: body.email });
 
     // Check de si existe el usuario
     if (!user) {
