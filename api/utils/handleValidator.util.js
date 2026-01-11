@@ -7,7 +7,7 @@ const { validationResult } = require("express-validator");
 // Funcs
 const validateResults = (req, res, next) => {
   try {
-    validationResult(res).throw();
+    validationResult(req).throw();
     return next();
   } catch (error) {
     handleHTTPError(res, "No se han podido validar los datos de entrada");
