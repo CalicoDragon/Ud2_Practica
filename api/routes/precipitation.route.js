@@ -13,7 +13,7 @@ const {
   validatorCreateItem,
   validatorUpdateItem,
   validatorDeleteItem,
-} = require("../validators/wind.validator");
+} = require("../validators/precipitation.validator");
 
 const authMiddleware = require("../middlewares/session.middleware");
 
@@ -23,7 +23,7 @@ const router = express.Router();
 // Routes
 router.get("/", getPrecipitations);
 router.get("/:id", validatorGetItem, getPrecipitation);
-router.post("/", authMiddleware, validatorCreateItem, createPrecipitation);
+router.post("/", validatorCreateItem, createPrecipitation);
 router.put("/:id", authMiddleware, validatorUpdateItem, updatePrecipitation);
 router.delete("/:id", authMiddleware, validatorDeleteItem, deletePrecipitation);
 

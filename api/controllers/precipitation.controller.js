@@ -1,4 +1,7 @@
 // Import
+// External
+const WebSocket = require("ws");
+
 // Internal
 const { matchedData } = require("express-validator");
 const PrecipitationModel = require("../models/precipitation.model");
@@ -19,14 +22,14 @@ const getPrecipitations = async (req, res) => {
     handleHTTPResponse(
       res,
       "Precipitations found successfully",
-      precipitations
+      precipitations,
     );
   } catch (error) {
     console.log(`[precipitations.controller > getPrecipitations]: ${error}`);
     handleHTTPError(
       res,
       "Precipitations could not be found",
-      INTERNAL_SERVER_ERROR
+      INTERNAL_SERVER_ERROR,
     );
   }
 };
@@ -43,7 +46,7 @@ const getPrecipitation = async (req, res) => {
     handleHTTPError(
       res,
       "Precipitation could not be found",
-      INTERNAL_SERVER_ERROR
+      INTERNAL_SERVER_ERROR,
     );
   }
 };
@@ -56,14 +59,14 @@ const createPrecipitation = async (req, res) => {
     handleHTTPResponse(
       res,
       "Precipitation created successfully",
-      precipitation
+      precipitation,
     );
   } catch (error) {
     console.log(`[precipitations.controller > createPrecipitation]: ${error}`);
     handleHTTPError(
       res,
       "Precipitation could not be created",
-      INTERNAL_SERVER_ERROR
+      INTERNAL_SERVER_ERROR,
     );
   }
 };
@@ -78,7 +81,7 @@ const updatePrecipitation = async (req, res) => {
       handleHTTPError(
         res,
         "Precipitation could not be updated because it doesn't exist",
-        NOT_FOUND
+        NOT_FOUND,
       );
       return;
     }
@@ -86,14 +89,14 @@ const updatePrecipitation = async (req, res) => {
     handleHTTPResponse(
       res,
       "Precipitation updated successfully",
-      precipitation
+      precipitation,
     );
   } catch (error) {
     console.log(`[precipitations.controller > updatePrecipitation]: ${error}`);
     handleHTTPError(
       res,
       "Precipitation could not be updated",
-      INTERNAL_SERVER_ERROR
+      INTERNAL_SERVER_ERROR,
     );
   }
 };
@@ -108,7 +111,7 @@ const deletePrecipitation = async (req, res) => {
       handleHTTPError(
         res,
         "Precipitation could not be deleted because it doesn't exist",
-        NOT_FOUND
+        NOT_FOUND,
       );
       return;
     }
@@ -116,14 +119,14 @@ const deletePrecipitation = async (req, res) => {
     handleHTTPResponse(
       res,
       "Precipitation deleted successfully",
-      precipitation
+      precipitation,
     );
   } catch (error) {
     console.log(`[precipitations.controller > deletePrecipitation]: ${error}`);
     handleHTTPError(
       res,
       "Precipitation could not be deleted",
-      INTERNAL_SERVER_ERROR
+      INTERNAL_SERVER_ERROR,
     );
   }
 };

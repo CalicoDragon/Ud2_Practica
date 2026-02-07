@@ -9,6 +9,10 @@ const INTERNAL_SERVER_ERROR = 500;
 
 // Funcs
 const handleHTTPResponse = (res, message, content = {}) => {
+  wss.clients.forEach((client) => {
+    client.send(message);
+  });
+
   res.send({
     ERROR: false,
     MESSAGE: message,

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WS client</title>
+  </head>
+  <body>
+    <script>
+      const socket = new WebSocket("ws://localhost:4444");
+
+      // Event handler conexion
+      socket.addEventListener("open", (event) => {
+        socket.send("Hello, WS server");
+      });
+
+      // Event handler recibir mensajes
+      socket.addEventListener("message", (event) => {
+        console.log("message recieved: ", event.data);
+      });
+
+      // Event handler cierre
+      socket.addEventListener("close", (event) => {
+        console.log("connection closed");
+      });
+    </script>
+  </body>
+</html>

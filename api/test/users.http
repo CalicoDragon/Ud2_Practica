@@ -27,7 +27,7 @@ Content-Type: application/json
 }
 
 ### UPDATE USER
-PUT http://localhost:3000/api/users/6963cb2968a109438d9cbbea HTTP/1.1
+PUT https://localhost:3000/api/users/6963cb2968a109438d9cbbea HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTg3MjUwZWUwZmEzZTg3NzQ5MTU0MTIiLCJpYXQiOjE3NzA0NjQ1MjYsImV4cCI6MTc3MDQ3MTcyNn0.reXFXeQ6JodcmL0RyipIZ42LLPIv6n3xJQ-u2lfStlE
 Content-Type: application/json
 

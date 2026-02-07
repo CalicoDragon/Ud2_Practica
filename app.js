@@ -9,40 +9,40 @@ const morgan = require("morgan");
 
 const mongooseDBConnect = require("./api/config/mongodb.config");
 
-const morganBody = require("morgan-body");
-const { IncomingWebhook } = require("@slack/webhook");
-const { INTERNAL_SERVER_ERROR } = require("./api/utils/handleResponse.util");
+// const morganBody = require("morgan-body");
+// const { IncomingWebhook } = require("@slack/webhook");
+// const { INTERNAL_SERVER_ERROR } = require("./api/utils/handleResponse.util");
 
 // Consts
 const API_PORT = process.env.API_PORT || 3000;
-const SLACK_WEBHOOK = process.env.SLACK_WEBHOOK;
+// const SLACK_WEBHOOK = process.env.SLACK_WEBHOOK;
 
 // Webhook y Logger Stream
-const webhook = new IncomingWebhook(SLACK_WEBHOOK);
+// const webhook = new IncomingWebhook(SLACK_WEBHOOK);
 
-const loggerStream = {
-  write: (message) => {
-    webhook.send({ text: message });
-  },
-};
+// const loggerStream = {
+//   write: (message) => {
+//     webhook.send({ text: message });
+//   },
+// };
 
 // Start server
 const app = express();
 
 // Le paso la app para que intercepte y salte errores con codigo menor al server
-morganBody(app, {
-  noColors: true,
-  skip: function (req, res) {
-    return res.statusCode < INTERNAL_SERVER_ERROR;
-  },
-  Stream: loggerStream,
-});
+// morganBody(app, {
+//   noColors: true,
+//   skip: function (req, res) {
+//     return res.statusCode < INTERNAL_SERVER_ERROR;
+//   },
+//   Stream: loggerStream,
+// });
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-app.use(morgan("dev "));
+app.use(morgan("dev"));
 
 // Routes
 app.use("/api", require("./api/routes"));
@@ -65,3 +65,34 @@ server.listen(API_PORT, () => {
 //   console.log(`Server listening on ${API_PORT}...`);
 //   mongooseDBConnect();
 // });
+
+// WEBSOCKET SERVER
+// imports
+const WebSocket = require("ws");
+
+// Crear sv puerto 4444
+global.wss = new WebSocket.Server({ port: 4444 });
+
+// Event handler a conexiones
+wss.on("connection", (ws) => {
+  console.log("New client connected");
+
+  ws.on("message", (msg) => {
+    console.log(`Message recieved: ${msg}`);
+
+    wss.clients.forEach((client) => {
+      if (client !== ws && client.readyState === WebSocket.OPEN) {
+        client.send(msg);
+      }
+    });
+  });
+
+  ws.on("close", () => {
+    console.log("Client disconnected");
+  });
+});
+
+// Export
+module.exports = {
+  wss,
+};

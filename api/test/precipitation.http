@@ -1,18 +1,19 @@
 ### GET ALL
-GET http://localhost:3000/api/precipitation HTTP/1.1
+GET https://localhost:3000/api/precipitation HTTP/1.1
 
 ### GET BY ID
 GET http://localhost:3000/api/precipitation/<ID> HTTP/1.1
 
 ### CREATE precipitation
-POST http://localhost:3000/api/precipitation HTTP/1.1
+POST https://localhost:3000/api/precipitation HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTg3MjUwZWUwZmEzZTg3NzQ5MTU0MTIiLCJpYXQiOjE3NzA0NjQ1MjYsImV4cCI6MTc3MDQ3MTcyNn0.reXFXeQ6JodcmL0RyipIZ42LLPIv6n3xJQ-u2lfStlE
 Content-Type: application/json
 
 {
   "type": "rain",
-  "probability": 10,
-  "accomulatedPrecipitation": 5,
-  "sonda": "690c8489882bf26e2290b5d4"
+  "probability": 5,
+  "accomulatedPrecipitation": 6,
+  "sonda": "690de89592fa18aff7064f38"
 }
 
 ### UPDATE precipitation

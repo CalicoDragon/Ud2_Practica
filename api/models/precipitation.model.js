@@ -15,7 +15,7 @@ const PrecipitationScheme = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Export
