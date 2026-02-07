@@ -2,6 +2,10 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
+const https = require("https");
+const fs = require("fs");
+const path = require("path");
+const morgan = require("morgan");
 
 const mongooseDBConnect = require("./api/config/mongodb.config");
 
@@ -38,10 +42,26 @@ morganBody(app, {
 app.use(cors());
 app.use(express.json());
 
+app.use(morgan("dev "));
+
 // Routes
 app.use("/api", require("./api/routes"));
 
-app.listen(API_PORT, () => {
+// Certificado
+const options = {
+  key: fs.readFileSync(path.join(__dirname, "cert/localhost-key.pem")),
+  cert: fs.readFileSync(path.join(__dirname, "cert/localhost.pem")),
+};
+
+// Server
+const server = https.createServer(options, app);
+
+server.listen(API_PORT, () => {
   console.log(`Server listening on ${API_PORT}...`);
   mongooseDBConnect();
 });
+
+// app.listen(API_PORT, () => {
+//   console.log(`Server listening on ${API_PORT}...`);
+//   mongooseDBConnect();
+// });

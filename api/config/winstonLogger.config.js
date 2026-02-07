@@ -15,7 +15,7 @@ const appLogger = createLogger({
   format: combine(
     label({ label: "APP", message: true }),
     timestamp(),
-    generalFormat()
+    generalFormat(),
   ),
   transports: [new transports.Console()],
 });
